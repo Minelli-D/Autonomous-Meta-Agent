@@ -1,0 +1,23 @@
+{
+  "mode": "feature",
+  "task": "Smoke test deterministic plan execution",
+  "repo_root": "../next-app",
+  "constraints": {
+    "max_files_changed": 2,
+    "forbid_paths": [
+      "app/api"
+    ]
+  },
+  "steps": [
+    {
+      "action": "create_file",
+      "path": "app/__plan_smoke__/page.tsx",
+      "content": "export default function PlanSmokePage() {\n  return <main>Plan smoke test page</main>;\n}\n"
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/page.tsx",
+      "text": "export default"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "mode": "feature",
+  "task": "Create a Users admin page with search + pagination and implement Next.js API endpoints to list users, update email/active status, and reset password.",
+  "repo_root": "../next-app",
+  "constraints": {
+
+  },
+  "steps": [
+    {
+      "action": "llm_step",
+      "analysis": "Create a simple deterministic user store with seed users. Expose functions for listUsers(query,page,pageSize), updateUser(id,{email,active}), and resetPassword(id) that returns a temporary password string. Keep it in a single module used by API route handlers.",
+      "allowed_actions": ["create_file", "edit_file"],
+      "allowed_paths": ["lib/usersStore.ts"]
+    },
+    {
+      "action": "assert_contains",
+      "path": "lib/usersStore.ts",
+      "text": "export function listUsers"
+    },
+    {
+      "action": "llm_step",
+      "analysis": "Implement GET /api/users with pagination + search. Read query/page/pageSize from URL search params. Return JSON { items, total } with stable ordering.",
+      "allowed_actions": ["create_file", "edit_file"],
+      "allowed_paths": ["app/api/users/route.ts"]
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/api/users/route.ts",
+      "text": "export async function GET"
+    },
+    {
+      "action": "llm_step",
+      "analysis": "Implement PATCH /api/users/:id to update email and/or active status. Validate inputs. Return updated user JSON. Use the shared store module.",
+      "allowed_actions": ["create_file", "edit_file"],
+      "allowed_paths": ["app/api/users/[id]/route.ts"]
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/api/users/[id]/route.ts",
+      "text": "export async function PATCH"
+    },
+    {
+      "action": "llm_step",
+      "analysis": "Implement POST /api/users/:id/reset-password that resets and returns JSON { ok: true, tempPassword } (or { ok: true } if you prefer). Use the shared store module.",
+      "allowed_actions": ["create_file", "edit_file"],
+      "allowed_paths": ["app/api/users/[id]/reset-password/route.ts"]
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/api/users/[id]/reset-password/route.ts",
+      "text": "export async function POST"
+    },
+    {
+      "action": "llm_step",
+      "analysis": "Create app/users/page.tsx (client component) that fetches /api/users with query/page/pageSize. Render a table with columns Nickname, Email, Active, Actions. Include search input, pagination controls, and per-row actions: toggle active (PATCH), edit email (inline edit or modal -> PATCH), reset password (POST) with a confirmation and show temp password if returned. Keep styling minimal and follow existing conventions.",
+      "allowed_actions": ["create_file", "edit_file"],
+      "allowed_paths": ["app/users/page.tsx"]
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/users/page.tsx",
+      "text": "export default"
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/users/page.tsx",
+      "text": "Users"
+    }
+  ]
+}

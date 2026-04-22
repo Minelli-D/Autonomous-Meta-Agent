@@ -1,0 +1,31 @@
+{
+  "mode": "feature",
+  "task": "Create a profile route using guided analysis context",
+  "repo_root": "../next-app",
+  "constraints": {
+    "max_files_changed": 2,
+    "forbid_paths": [
+      "app/api",
+      "package.json"
+    ]
+  },
+  "steps": [
+    {
+      "action": "llm_step",
+      "analysis": "Create or update the user profile page in App Router style. Follow existing code conventions and keep the component simple. Prefer a static page component with semantic markup.",
+      "allowed_actions": [
+        "create_file",
+        "edit_file"
+      ],
+      "allowed_paths": [
+        "app/profile/page.tsx",
+        "app/users/page.tsx"
+      ]
+    },
+    {
+      "action": "assert_contains",
+      "path": "app/profile/page.tsx",
+      "text": "export default"
+    }
+  ]
+}
